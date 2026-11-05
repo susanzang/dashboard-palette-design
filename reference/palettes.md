@@ -1,184 +1,304 @@
-# 色板配方全集
+# 令牌全表
 
-三套主配方，附场景变体与组件用法。所有色值可直接复制。
-
----
-
-## 配方 A：深色数据看板
-
-### 完整变量
-
-```css
-:root {
-  /* 背景层级：同一色相 H220，明度递增 */
-  --bg:       #0b1220;   /* 页面底   L8  */
-  --panel:    #121a2b;   /* 卡片     L12 */
-  --panel2:   #182338;   /* 卡片上层 L16 */
-  --border:   #243049;   /* 描边     L21 */
-
-  /* 文字 */
-  --text:     #e8eefc;   /* 正文，对比度 16.11 */
-  --muted:    #93a0b8;   /* 次要，对比度 6.59  */
-
-  /* 语义 */
-  --accent:   #4ea1ff;   /* 强调/交互，6.51 */
-  --up:       #3dd68c;   /* 上涨/正向，9.27 */
-  --down:     #ff6b7a;   /* 下跌/负向，6.32 */
-  --warn:     #f5c542;   /* 警告 */
-
-  /* 半透明分层（替代新增色值） */
-  --line-strong:#ffffff1f;
-  --line-soft:  #ffffff08;
-}
-```
-
-### 背景光晕
-
-大面积低对比径向渐变，制造纵深，不影响文字可读：
-
-```css
-body {
-  background:
-    radial-gradient(1200px 600px at 10% -10%, #1a2744 0%, transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, #1b1633 0%, transparent 45%),
-    var(--bg);
-}
-```
-
-### 卡片
-
-```css
-.card {
-  background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
-}
-```
-
-### 国内涨跌版
-
-仅交换两个变量，其余不动：
-
-```css
---up:   #ff5a6a;   /* 红涨，6.17 */
---down: #22c55e;   /* 绿跌，8.22 */
-```
+按三层组织结构：基础色 → 语义令牌 → 用途分档。所有色值取自实际样式表，可直接复制。
 
 ---
 
-## 配方 B：浅色分析报告
+## 一、浅色界面完整令牌
 
-### 完整变量
+### 背景
 
 ```css
-:root {
-  --bg:     #f5f6f8;   /* 页面底 H220 L97 */
-  --card:   #ffffff;   /* 卡片 L100 */
-  --border: #e5e6eb;   /* 描边 */
-  --text:   #1f2329;   /* 正文 15.78 */
-  --muted:  #646a73;   /* 次要 5.04 */
-  --shadow: 0 1px 3px rgba(31,35,41,.08);
-}
+--paper:    #ffffff;   /* 主内容区 */
+--paper-2:  #fcfcfc;   /* 标题栏、工具栏 */
+--paper-3:  #f5f5f5;   /* 侧栏 */
+--scrim:    #00000080; /* 遮罩 50% */
+--scrim-heavy: #000000e5; /* 重遮罩 90% */
 ```
 
-### 品牌色替换
+三层纸色的明度差只有 1 到 3 个百分点。层次不靠底色拉开，靠描边与阴影。
 
-只改 `--brand` 一个变量，其余保持。参考实测：
-
-| 品牌 | 色值 | 白底对比度 | 建议用途 |
-|---|---|---|---|
-| 京东红 | `#e1251b` | 4.69 | 大号数值、页头渐变 |
-| 深红 | `#c8161d` | 5.85 | 正文级文字 |
-| 品牌蓝 | `#2563eb` | 5.17 | 链接、按钮 |
-| 品牌绿 | `#16a34a` | 3.30 | 仅用于大字号或图标 |
-
-对比度低于 4.5 的色值不要直接用于小字。
-
-### 页头渐变
-
-大面积聚焦区才用渐变，方向固定 135 度：
+### 文字四级
 
 ```css
-.header {
-  background: linear-gradient(135deg, var(--brand) 0%, #ff6a3d 100%);
-  color: #fff;
-}
+--text-primary:    #1c1c1c;    /* 100%  对比度 17.04 */
+--text-secondary:  #1c1c1cad;  /* 68%   对比度 5.83  */
+--text-tertiary:   #1c1c1c8f;  /* 56%   对比度 3.95  */
+--text-quaternary: #1c1c1c66;  /* 40%   对比度 2.49  */
 ```
 
-### KPI 卡片
+### 图标四级
 
 ```css
-.kpi {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  padding: 14px 16px;
-}
-.kpi .label { color: var(--muted); font-size: 12px; }
-.kpi .value { font-size: 22px; font-weight: 700; color: var(--brand-dark); }
+--icon-primary:    #1c1c1ceb;  /* 92% */
+--icon-secondary:  #1c1c1ca8;  /* 66% */
+--icon-tertiary:   #1c1c1c85;  /* 52% */
+--icon-quaternary: #1c1c1c52;  /* 32% */
 ```
 
-用负 margin 让 KPI 卡上浮压住页头，是廉价但有效的层次手段：
+整体比文字低一档，因为图形块的视觉重量大于笔画。
+
+### 描边四级
 
 ```css
-.kpis { margin-top: -36px; }
+--border-primary:   #1c1c1c3d;  /* 24% */
+--border-secondary: #1c1c1c1f;  /* 12% */
+--border-tertiary:  #1c1c1c14;  /* 8%  */
+--border-quaternary:#1c1c1c0f;  /* 6%  */
+```
+
+### 阴影
+
+```css
+--shadow-card:      #1c1c1c09;  /* 最轻，卡片 */
+--shadow-secondary: #1c1c1c12;
+--shadow-control:   #1c1c1c1f;
+--shadow-popover:   #1c1c1c1a;
+--shadow-modal:     #1c1c1c1a;
+--shadow-window:    #1c1c1c8f;  /* 最重，窗口投影 */
+```
+
+### 高光
+
+```css
+--specular-primary:    #ffffff8f;  /* 56% */
+--specular-secondary:  #ffffff29;  /* 16% */
+--specular-tertiary:   #ffffff1f;  /* 12% */
+--specular-quaternary: #ffffff0f;  /* 6%  */
 ```
 
 ---
 
-## 配方 C：中性工具界面
+## 二、语义色派生矩阵
+
+每个色家族按同一模板展开。以 accent 为例，完整十二个令牌：
 
 ```css
-:root {
-  --chrome: #141414;   /* 外层 L8  */
-  --pane:   #181818;   /* 主面板 L9 */
-  --raised: #242424;   /* 悬浮层 L14 */
-  --text:   #f0f0f0;   /* 正文 L94 */
-  --muted:  #a0a0a0;
-  --brand:  #f54e00;   /* 品牌橙 */
-}
+/* 填充 */
+--accent-primary:          #1680f3;   /* 对比度 3.88 */
+--accent-primary-hover:    #126fd4;   /* 暗 12% */
+--accent-primary-disabled: #1680f32b; /* alpha 17% */
+--accent-secondary:        #1e86fc17; /* alpha 9% */
+--accent-secondary-hover:  #1e86fc2b; /* alpha 17% */
+--accent-bright:           #1e86fc;   /* 高饱和，用于需要跳出的点 */
+
+/* 文字 */
+--text-accent-primary:     #0b6dd3;   /* 对比度 5.07 */
+--text-accent-quaternary:  #1e86fc2b;
+
+/* 图标与描边 */
+--icon-accent-primary:     #1680f3;
+--border-accent-primary:   #1680f3;
+--border-accent-quaternary: #1e86fc2b;
 ```
 
-饱和度全为 0。适合编辑器、控制台、需要长时间注视的界面。特征是存在感低、不与内容争色。
+### 四个状态家族的取值
+
+| 家族 | 填充 | hover | 文字 | 文字对比度 |
+|---|---|---|---|---|
+| accent | `#1680f3` | `#126fd4` | `#0b6dd3` | 5.07 |
+| danger | `#e72e3b` | `#c82532` | `#cd2834` | 5.32 |
+| success | `#10ab61` | `#0d9655` | `#00854a` | 4.71 |
+| warn | `#da830e` | `#c2730b` | `#aa6300` | 4.67 |
+
+规律：hover 比基础暗约 12%，文字比填充暗一档，disabled 用 alpha 17%，secondary 用 alpha 9%。
+
+### 扩展色家族
+
+除状态色外还有 blue、green、cyan、orange、yellow、red、magenta、purple、brown，同一模板。用于标签、分类、图表辅助色。
+
+```css
+--green:  #10ab61;   --green-bright:  #14c16f;
+--cyan:   #10a693;   --cyan-bright:   #13b7a2;
+--orange: #ee620d;   --orange-bright: #fd690f;
+--yellow: #da830e;   --yellow-bright: #f59312;
+--red:    #e72e3b;   --red-bright:    #fb2b3e;
+```
 
 ---
 
-## 图表多色序列
+## 三、图表色板
 
-单系列图表用语义色即可。多系列必须有序，否则读者无法把图例和线条对应起来。
-
-### 深色背景推荐序列
+### 浅色主题
 
 ```css
---series-1:#4ea1ff;  /* 蓝 */
---series-2:#3dd68c;  /* 绿 */
---series-3:#f5c542;  /* 黄 */
---series-4:#b48ead;  /* 紫 */
---series-5:#ff9f68;  /* 橙 */
---series-6:#7fd6d6;  /* 青 */
+--series-0: #1084FE;  /* 蓝  H211 */
+--series-1: #C24E00;  /* 橙  H24  */
+--series-2: #9159FE;  /* 紫  H260 */
+--series-3: #009957;  /* 绿  H154 */
+--series-4: #FF309B;  /* 粉  H329 */
+--series-5: #C27400;  /* 琥珀 H36 */
+--series-6: #008F7E;  /* 青  H173 */
+--series-7: #97683D;  /* 棕  H29  */
+
+--series-other:        #777777;
+--series-negative:     #C21D2E;
+--series-single-rest:  #B5D9FF;   /* 首色 #1084FE 的浅版 */
+--area-alpha:          24;        /* 14% */
+--band-alpha:          40;        /* 25% */
 ```
 
-排序原则：相邻两色在色相上至少差 40 度，明度交错（一深一浅），确保色盲用户也能区分前两条。
+白底对比度：3.65 / 4.79 / 4.15 / 3.69 / 3.42 / 3.63 / 4.02 / 4.81。图表色块按图形标准（3.0）评估，全部通过。
 
-### 避免的做法
+### 深色主题
 
-- 用同一色相不同明度做多系列 —— 图例难以对应
-- 超过 8 个系列 —— 改用小多图（small multiples）
-- 红绿同时作为前两位系列色 —— 与涨跌语义冲突
+```css
+--series-0: #1084FE;  /* 保持不变 */
+--series-1: #FF6700;  /* 提亮 */
+--series-2: #9159FE;  /* 保持不变 */
+--series-3: #00C972;  /* 提亮 */
+--series-4: #FF309B;  /* 保持不变 */
+--series-5: #FF9800;  /* 提亮 */
+--series-6: #00BCA6;  /* 提亮 */
+--series-7: #97683D;  /* 保持不变 */
+
+--series-negative:    #FF263C;
+--series-single-rest: #084382;
+```
+
+在 `#181818` 上对比度：4.86 / 6.08 / 4.28 / 8.12 / 5.20 / 8.24 / 7.39 / 3.69。
+
+只有不足的四个被提亮，达标的保持原值。这是验算后的结果，不是整体调色。
+
+### 取用顺序
+
+```
+定义 0 1 2 3 4 5 6 7
+取用 0 5 3 4 2 1 6 7
+```
+
+换算：蓝 → 琥珀 → 绿 → 粉 → 紫 → 橙 → 青 → 棕。
+
+相邻色相差：175 / 118 / 175 / 69。
+
+默认顺序的前四位是蓝紫相邻（差 49 度），两三条线时难以区分。重排后前四位冷暖交替，最小间隔提到 69 度。
+
+### 连续色阶
+
+```css
+/* 浅色：值越大越深 */
+--sequential: #D6EAFF, #80BEFE, #459FFE, #1084FE, #0C64C1, #084382;
+
+/* 深色：值越大越浅 */
+--sequential: #052A51, #084382, #0C64C1, #1084FE, #459FFE, #80BEFE;
+```
+
+### 双向色阶
+
+```css
+/* 浅色：中点 #E8E8E8 = 背景色 */
+--diverging: #C21D2E, #FF8C98, #E8E8E8, #80BEFE, #0C64C1;
+
+/* 深色：中点 #262626 = 背景色 */
+--diverging: #FF5667, #82131F, #262626, #084382, #459FFE;
+```
+
+中点必须是背景色，零值才会融入。
 
 ---
 
-## 组件级用色规则
+## 四、深色界面令牌
+
+```css
+--chrome: #141414;
+--pane:   #181818;
+--raised: #242424;
+
+--text:   #f0f0f0;   /* 对比度 15.58 */
+--muted:  #a0a0a0;
+
+--accent:  #599ce7;  /* 6.20 */
+--success: #3fa266;  /* 5.56 */
+--danger:  #fc6b83;  /* 6.40 */
+--warn:    #f1b467;  /* 9.69 */
+--brand:   #f54e00;  /* 5.05 */
+```
+
+### 语法高亮
+
+```css
+--syntax-bg:        #181818;
+--syntax-fg:        #d6d6dd;   /* 12.28 */
+--syntax-keyword:   #82d2ce;
+--syntax-string:    #e394dc;
+--syntax-function:  #efb080;
+--syntax-number:    #ebc88c;
+--syntax-constant:  #f8c762;
+--syntax-link:      #87c3ff;
+--syntax-comment:   #e4e4e45e; /* 37% alpha，对比度 2.96 */
+```
+
+注释刻意低对比。长时间读代码时，注释不该与代码争夺注意力。
+
+### 终端 16 色（Nord 派生）
+
+```css
+--ansi-black:#242424;   --ansi-red:#fc6b83;     --ansi-green:#3fa266;
+--ansi-yellow:#d2943e;  --ansi-blue:#81a1c1;    --ansi-magenta:#b48ead;
+--ansi-cyan:#88c0d0;    --ansi-white:#f0f0f0;
+--ansi-bright-black:#f0f0f099; --ansi-bright-red:#fc6b83;
+--ansi-bright-green:#70b489;   --ansi-bright-yellow:#f1b467;
+--ansi-bright-blue:#87a6c4;    --ansi-bright-magenta:#b48ead;
+--ansi-bright-cyan:#88c0d0;    --ansi-bright-white:#f0f0f0;
+```
+
+饱和度普遍低于常见终端主题，因为深色背景下高饱和色会刺眼。
+
+---
+
+## 五、组件级用法
 
 | 组件 | 用色规则 |
 |---|---|
-| 页头 | 渐变底 + 白字，仅此一处大面积彩色 |
-| KPI 数值 | 强调色或品牌深色，不用语义色（除非本身就是涨跌指标） |
-| 表格表头 | 次要文字色，不加背景 |
-| 表格分隔 | `--border` 单线，不用斑马纹 |
-| 排名徽章 | 浅色底 + 品牌色文字，如 `#fff1f0` + `#e1251b` |
-| 状态胶囊 | 深底 + 亮字，如 `#052e1a` + `#86efac` |
-| 焦点描边 | 强调色，2px，不用外发光 |
-| 禁用态 | 正文色降到 40% 透明度 |
+| 页面底 | `--paper` |
+| 侧栏 | `--paper-3`，右侧加 `--border-tertiary` 分隔 |
+| 卡片 | `--paper` + `--border-secondary` + `--shadow-card` |
+| 卡片悬浮 | 阴影升到 `--shadow-control`，描边升到 `--border-primary` |
+| 主按钮 | `--accent-primary` 底 + 白色文字 |
+| 次按钮 | `--accent-secondary` 底 + `--text-accent-primary` 文字 |
+| 危险操作 | `--danger` 底 + 白字；文字形态用 `--text-danger` |
+| 标签/胶囊 | `--*-secondary` 底 + `--text-*-primary` 文字 |
+| 表头 | `--text-secondary`，不加背景 |
+| 表格分隔 | `--border-tertiary` 单线，不用斑马纹 |
+| 焦点环 | `--accent` 2px，不用外发光 |
+| 禁用态 | 背景 `--*-disabled`，文字 `--text-quaternary` |
+| 占位符 | `--text-quaternary` |
+| 遮罩 | `--scrim`，重模态用 `--scrim-heavy` |
+
+### 卡片组合示例
+
+```css
+.card {
+  background: var(--paper);
+  border: 1px solid var(--border-secondary);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--shadow-card);
+}
+.card:hover {
+  border-color: var(--border-primary);
+  box-shadow: 0 4px 12px var(--shadow-control);
+}
+```
+
+### 深色卡片
+
+```css
+.card-dark {
+  background: linear-gradient(180deg, #121a2b 0%, #182338 100%);
+  border: 1px solid #243049;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+}
+```
+
+---
+
+## 六、迁移到其他色相
+
+把浅色体系换成冷蓝底（如 `#0b1220`），只需三步：
+
+1. 三个纸色替换为同色相的三档：`#0b1220 / #121a2b / #182338`，色相误差不超过 5 度
+2. 墨色 `#1c1c1c` 换成纸白 `#e8eefc`，alpha 档位不变
+3. 语义色取深色主题那一列
+
+其余规则全部适用：alpha 派生、填充与文字分离、系列色重排、中点为背景色。
